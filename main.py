@@ -67,6 +67,22 @@ class Mesure(db.Model):
     validité = db.Column(db.Integer)
     measurement_date = db.Column(db.DateTime)
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'station_id': self.station_id,
+            'polluant_id': self.polluant_id,
+            'value': self.value,
+            'valeur_brute': self.valeur_brute,
+            'unité_de_mesure': self.unité_de_mesure,
+            'taux_de_saisie': self.taux_de_saisie,
+            'couverture_temporelle': self.couverture_temporelle,
+            'couverture_de_données': self.couverture_de_données,
+            'code_qualité': self.code_qualité,
+            'validité': self.validité,
+            'measurement_date': self.measurement_date.isoformat() if self.measurement_date else None
+        }
+
 '''
 @app.route('/organismes', methods=['GET'])
 def get_organismes():
