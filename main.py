@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine,text
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/air_quality'
@@ -10,8 +10,8 @@ engine = create_engine('mysql://root:root@localhost/air_quality')
 
 # Créer une base de données et sélectionner la nouvelle base de données
 with engine.connect() as connection:
-    connection.execute("CREATE DATABASE IF NOT EXISTS air_quality")
-    connection.execute("USE air_quality")
+    connection.execute(text("CREATE DATABASE IF NOT EXISTS air_quality"))
+    connection.execute(text("USE air_quality"))
 
 db = SQLAlchemy(app)
 
@@ -165,7 +165,7 @@ def get_regional_centers():
 #Endpoint : /measurements?pollutant_id={pollutant_id}
 
 @app.route('/measurements', methods=['GET'])
-def get_measurements():
+def get_measurements_by_station_id():
     station_id = request.args.get('station_id')
 
     if station_id is not None:
@@ -176,7 +176,7 @@ def get_measurements():
 
 #Récupération des Mesures pour un Polluant Spécifique :
 @app.route('/measurements', methods=['GET'])
-def get_measurements():
+def get_measurements_by_polluant_id():
     pollutant_id = request.args.get('pollutant_id')
 
     if pollutant_id is not None:
@@ -188,7 +188,7 @@ def get_measurements():
 #Récupération des Mesures pour une Période Spécifique :
 #Endpoint : /measurements?station_id={station_id}&start_date={yyyy-mm-dd}&end_date={yyyy-mm-dd}
 @app.route('/measurements', methods=['GET'])
-def get_measurements():
+def get_measurements_by_date():
     station_id = request.args.get('station_id')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
@@ -206,7 +206,7 @@ def get_measurements():
 #Endpoint : /daily_average?pollutant_id={pollutant_id}&date={yyyy-mm-dd}
 
 @app.route('/daily_average', methods=['GET'])
-def get_daily_average():
+def get_daily_average_by_polluant_id():
     pollutant_id = request.args.get('pollutant_id')
     date = request.args.get('date')
 
@@ -221,7 +221,7 @@ def get_daily_average():
 #Récupération de la Moyenne Journalière pour tous les Polluants sur une Station :
 #Endpoint : /daily_average?station_id={station_id}&date={yyyy-mm-dd}
 @app.route('/daily_average', methods=['GET'])
-def get_daily_average():
+def get_daily_average_by_station_id():
     station_id = request.args.get('station_id')
     date = request.args.get('date')
 
@@ -241,7 +241,7 @@ def get_daily_average():
 #Récupération du Maximum et Minimum pour un Polluant Spécifique sur une Période :
 #Endpoint : /range?pollutant_id={pollutant_id}&start_date={yyyy-mm-dd}&end_date={yyyy-mm-dd}
 @app.route('/range', methods=['GET'])
-def get_range():
+def get_range_by_polluant():
     pollutant_id = request.args.get('pollutant_id')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
