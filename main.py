@@ -6,13 +6,12 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/air_quality'
 
 # Créer un moteur SQLAlchemy
-engine = create_engine('mysql://root:root@localhost')
+engine = create_engine('mysql://root:root@localhost/air_quality')
 
-# Créer une base de données
-engine.execute("CREATE DATABASE IF NOT EXISTS air_quality")
-
-# Sélectionner la nouvelle base de données
-engine.execute("USE air_quality")
+# Créer une base de données et sélectionner la nouvelle base de données
+with engine.connect() as connection:
+    connection.execute("CREATE DATABASE IF NOT EXISTS air_quality")
+    connection.execute("USE air_quality"
 
 db = SQLAlchemy(app)
 
@@ -289,5 +288,6 @@ def load_data_to_db(csv_file):
 
 if __name__ == '__main__':
     db.create_all()
-    load_data_to_db('FR_E2_2021-01-01.csv')
+    #load_data_to_db('FR_E2_2021-01-01.csv')
+    load_data_to_db('test.csv')
     app.run(debug=True)
