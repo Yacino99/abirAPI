@@ -275,17 +275,19 @@ def get_measurements():
 
 def load_data_to_db(csv_file):
     # Lire les données du fichier CSV
-    df = pd.read_csv(csv_file)
+    df = pd.read_csv(csv_file, delimiter=';')
+    #df.columns = df.columns.str.replace(' ', '_')
 
     # Créer un moteur SQLAlchemy
     engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-
+    print(df.columns)
     # Charger les données dans chaque table
-    df[['id', 'name']].drop_duplicates().to_sql('Organisme', engine, if_exists='append', index=False)
-    df[['id', 'organisme_id', 'name']].drop_duplicates().to_sql('Zas', engine, if_exists='append', index=False)
-    df[['id', 'zas_id', 'name', 'type_d_implantation']].drop_duplicates().to_sql('Station', engine, if_exists='append', index=False)
-    df[['id', 'name']].drop_duplicates().to_sql('Polluant', engine, if_exists='append', index=False)
-    df[['id', 'station_id', 'polluant_id', 'value', 'valeur_brute', 'unité_de_mesure', 'taux_de_saisie', 'couverture_temporelle', 'couverture_de_données', 'code_qualité', 'validité', 'measurement_date']].to_sql('Mesure', engine, if_exists='append', index=False)
+
+    df[['Organisme']].drop_duplicates().to_sql('Organisme', engine, if_exists='append', index=False)
+    df[['code zas', 'Organisme', 'Zas']].drop_duplicates().to_sql('Zas', engine, if_exists='append', index=False)
+    df[['code site', 'code zas', 'nom site', 'type d\'implantation']].drop_duplicates().to_sql('Station', engine, if_exists='append', index=False)
+    df[['Polluant']].drop_duplicates().to_sql('Polluant', engine, if_exists='append', index=False)
+    df[['code site', 'Polluant', 'valeur', 'valeur brute', 'unité de mesure', 'taux de saisie', 'couverture temporelle', 'couverture de données', 'code qualité', 'validité', 'Date de début']].drop_duplicates().to_sql('Mesure', engine, if_exists='append', index=False)
 
 if __name__ == '__main__':
     with app.app_context():
