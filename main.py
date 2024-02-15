@@ -11,7 +11,7 @@ engine = create_engine('mysql://root:root@localhost/air_quality')
 # Créer une base de données et sélectionner la nouvelle base de données
 with engine.connect() as connection:
     connection.execute("CREATE DATABASE IF NOT EXISTS air_quality")
-    connection.execute("USE air_quality"
+    connection.execute("USE air_quality")
 
 db = SQLAlchemy(app)
 
