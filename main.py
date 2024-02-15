@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine,text
+import pandas as pd
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/air_quality'
@@ -287,7 +288,8 @@ def load_data_to_db(csv_file):
     df[['id', 'station_id', 'polluant_id', 'value', 'valeur_brute', 'unité_de_mesure', 'taux_de_saisie', 'couverture_temporelle', 'couverture_de_données', 'code_qualité', 'validité', 'measurement_date']].to_sql('Mesure', engine, if_exists='append', index=False)
 
 if __name__ == '__main__':
-    db.create_all()
-    #load_data_to_db('FR_E2_2021-01-01.csv')
-    load_data_to_db('test.csv')
+    with app.app_context():
+        db.create_all()
+        #load_data_to_db('FR_E2_2021-01-01.csv')
+        load_data_to_db('test.csv')
     app.run(debug=True)
