@@ -276,7 +276,7 @@ def get_measurements():
 def load_data_to_db(csv_file):
     # Lire les données du fichier CSV
     df = pd.read_csv(csv_file, delimiter=';')
-    #df.columns = df.columns.str.replace(' ', '_')
+    #df.columns = df.columns.str.replace (' ', '_')
 
     # Créer un moteur SQLAlchemy
     engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
